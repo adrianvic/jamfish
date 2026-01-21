@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name" translatable="false">Gelli</string>
+    <string name="app_name" translatable="false">Jamfish</string>
 
     <string name="dkanada" translatable="false">dkanada</string>
     <string name="aachen_germany" translatable="false">Aachen, Germany</string>

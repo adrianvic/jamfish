@@ -146,7 +146,7 @@
 
         </com.google.android.material.appbar.AppBarLayout>
 
-        <com.dkanada.gramophone.views.InceptionScrollView
+        <org.adrianvictor.geleia.views.InceptionScrollView
             android:id="@+id/scroll_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -179,7 +179,7 @@
 
             </LinearLayout>
 
-        </com.dkanada.gramophone.views.InceptionScrollView>
+        </org.adrianvictor.geleia.views.InceptionScrollView>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

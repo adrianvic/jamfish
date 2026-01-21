@@ -233,5 +233,7 @@
     <string name="error_empty_server">Please fill in the server address.</string>
     <string name="error_unexpected">An unexpected error occurred.</string>
     <string name="error_empty_username">Please fill in your username.</string>
+    <string name="dkanada_summary">Forking Phonograph and making Gelli</string>
+    <string name="adrianvictor">Adrian Victor</string>
 
 </resources>

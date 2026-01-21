@@ -9,12 +9,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <com.dkanada.gramophone.views.StatusBarView
+        <org.adrianvictor.geleia.views.StatusBarView
             android:id="@+id/player_status_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/status_bar_padding" />
 
-        <com.dkanada.gramophone.views.StatusBarView
+        <org.adrianvictor.geleia.views.StatusBarView
             android:layout_width="match_parent"
             android:layout_height="@dimen/status_bar_padding"
             android:background="@color/overlay_light" />
@@ -41,18 +41,18 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <com.dkanada.gramophone.views.WidthFitSquareLayout
+                <org.adrianvictor.geleia.views.WidthFitSquareLayout
                     android:id="@+id/album_cover_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <fragment
                         android:id="@+id/player_album_cover_fragment"
-                        class="com.dkanada.gramophone.fragments.player.PlayerAlbumCoverFragment"
+                        class="org.adrianvictor.geleia.fragments.player.PlayerAlbumCoverFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </com.dkanada.gramophone.views.WidthFitSquareLayout>
+                </org.adrianvictor.geleia.views.WidthFitSquareLayout>
 
             </FrameLayout>
 
@@ -79,7 +79,7 @@
 
             <fragment
                 android:id="@+id/playback_controls_fragment"
-                class="com.dkanada.gramophone.fragments.player.flat.FlatPlayerPlaybackControlsFragment"
+                class="org.adrianvictor.geleia.fragments.player.flat.FlatPlayerPlaybackControlsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

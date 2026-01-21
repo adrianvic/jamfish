@@ -1,7 +1,7 @@
 -dontwarn
 -ignorewarnings
 
--keep class com.dkanada.gramophone.**.* { *; }
+-keep class org.adrianvictor.geleia.**.* { *; }
 -keepnames class **.* { *; }
 -keepattributes SourceFile
 -keepattributes LineNumberTable
@@ -17,7 +17,7 @@
 
 # Glide
 -keep public class * extends com.bumptech.glide.module.AppGlideModule
--keep class com.bumptech.glide.GeneratedAppGlideModuleImpl
+-keep class org.bumptech.glide.GeneratedAppGlideModuleImpl
 -keep public enum com.bumptech.glide.load.resource.bitmap.ImageHeaderParser$** {
     **[] $VALUES;
     public *;

@@ -11,12 +11,12 @@
         android:elevation="@dimen/toolbar_elevation"
         tools:ignore="UnusedAttribute">
 
-        <com.dkanada.gramophone.views.StatusBarView
+        <org.adrianvictor.geleia.views.StatusBarView
             android:id="@+id/player_status_bar"
             android:layout_width="match_parent"
             android:layout_height="@dimen/status_bar_padding" />
 
-        <com.dkanada.gramophone.views.StatusBarView
+        <org.adrianvictor.geleia.views.StatusBarView
             android:layout_width="match_parent"
             android:layout_height="@dimen/status_bar_padding"
             android:background="@color/overlay_light" />
@@ -32,18 +32,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.dkanada.gramophone.views.HeightFitSquareLayout
+        <org.adrianvictor.geleia.views.HeightFitSquareLayout
             android:id="@+id/cover_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <fragment
                 android:id="@+id/player_album_cover_fragment"
-                class="com.dkanada.gramophone.fragments.player.PlayerAlbumCoverFragment"
+                class="org.adrianvictor.geleia.fragments.player.PlayerAlbumCoverFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
 
-        </com.dkanada.gramophone.views.HeightFitSquareLayout>
+        </org.adrianvictor.geleia.views.HeightFitSquareLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +53,7 @@
 
             <fragment
                 android:id="@+id/playback_controls_fragment"
-                class="com.dkanada.gramophone.fragments.player.flat.FlatPlayerPlaybackControlsFragment"
+                class="org.adrianvictor.geleia.fragments.player.flat.FlatPlayerPlaybackControlsFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 

@@ -38,7 +38,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
-            <com.dkanada.gramophone.views.IconImageView
+            <org.adrianvictor.geleia.views.IconImageView
                 android:id="@+id/icon_author"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -56,7 +56,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/dkanada"
+                    android:text="@string/adrianvictor"
                     android:textAppearance="@style/TextAppearance.AppCompat.Subhead" />
 
                 <TextView
@@ -84,7 +84,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
-            <com.dkanada.gramophone.views.IconImageView
+            <org.adrianvictor.geleia.views.IconImageView
                 android:id="@+id/icon_twitter"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -115,7 +115,7 @@
             android:paddingLeft="16dp"
             android:paddingRight="16dp">
 
-            <com.dkanada.gramophone.views.IconImageView
+            <org.adrianvictor.geleia.views.IconImageView
                 android:id="@+id/icon_website"
                 android:layout_width="24dp"
                 android:layout_height="24dp"

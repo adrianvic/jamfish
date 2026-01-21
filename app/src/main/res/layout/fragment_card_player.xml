@@ -33,7 +33,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-                <com.dkanada.gramophone.views.WidthFitSquareLayout
+                <org.adrianvictor.geleia.views.WidthFitSquareLayout
                     android:id="@+id/album_cover_container"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -41,15 +41,15 @@
 
                     <fragment
                         android:id="@+id/player_album_cover_fragment"
-                        class="com.dkanada.gramophone.fragments.player.PlayerAlbumCoverFragment"
+                        class="org.adrianvictor.geleia.fragments.player.PlayerAlbumCoverFragment"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content" />
 
-                </com.dkanada.gramophone.views.WidthFitSquareLayout>
+                </org.adrianvictor.geleia.views.WidthFitSquareLayout>
 
                 <fragment
                     android:id="@+id/playback_controls_fragment"
-                    class="com.dkanada.gramophone.fragments.player.card.CardPlayerPlaybackControlsFragment"
+                    class="org.adrianvictor.geleia.fragments.player.card.CardPlayerPlaybackControlsFragment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/album_cover_container" />
@@ -68,7 +68,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
-                    <com.dkanada.gramophone.views.StatusBarView
+                    <org.adrianvictor.geleia.views.StatusBarView
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/status_bar_padding" />
 
@@ -83,7 +83,7 @@
 
         </FrameLayout>
 
-        <com.dkanada.gramophone.views.StatusBarMarginFrameLayout
+        <org.adrianvictor.geleia.views.StatusBarMarginFrameLayout
             android:id="@+id/player_panel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -149,7 +149,7 @@
 
             </androidx.cardview.widget.CardView>
 
-        </com.dkanada.gramophone.views.StatusBarMarginFrameLayout>
+        </org.adrianvictor.geleia.views.StatusBarMarginFrameLayout>
 
     </com.sothree.slidinguppanel.SlidingUpPanelLayout>
 

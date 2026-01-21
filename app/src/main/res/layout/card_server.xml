@@ -39,7 +39,7 @@
 
     </LinearLayout>
 
-    <com.dkanada.gramophone.views.IconImageView
+    <org.adrianvictor.geleia.views.IconImageView
         android:id="@+id/delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/select"
@@ -47,7 +47,7 @@
         app:srcCompat="@drawable/ic_delete_white_24dp"
         style="@style/OverFlowButton" />
 
-    <com.dkanada.gramophone.views.IconImageView
+    <org.adrianvictor.geleia.views.IconImageView
         android:id="@+id/select"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

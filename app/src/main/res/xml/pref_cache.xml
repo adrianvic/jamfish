@@ -2,7 +2,7 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.dkanada.gramophone.views.settings.JellyPreferenceCategory android:title="@string/pref_header_cache">
+    <org.adrianvictor.geleia.views.settings.JellyPreferenceCategory android:title="@string/pref_header_cache">
 
         <Preference
             app:iconSpaceReserved="false"
@@ -31,6 +31,6 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_title_media_cache_size" />
 
-    </com.dkanada.gramophone.views.settings.JellyPreferenceCategory>
+    </org.adrianvictor.geleia.views.settings.JellyPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

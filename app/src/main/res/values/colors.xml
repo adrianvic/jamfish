@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <color name="color_primary">#3F51B5</color>
-    <color name="color_accent">#F50057</color>
+    <color name="color_primary">#000000</color>
+    <color name="color_accent">#FFFFFF</color>
 
     <!-- Pink A400 -->
-    <color name="color_favorite">#F50057</color>
+    <color name="color_favorite">#000000</color>
 
     <!-- Blue Grey 500 and Grey 100 -->
     <color name="color_shortcut_foreground">#607D8B</color>

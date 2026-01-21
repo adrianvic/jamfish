@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.dkanada.gramophone">
+    package="org.adrianvictor.geleia">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -13,7 +13,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
-        android:name=".App"
+        android:name="org.adrianvictor.geleia.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -23,14 +23,14 @@
         android:theme="@style/Theme.Phonograph.Light"
         tools:ignore="UnusedAttribute">
         <activity
-            android:name=".activities.MainActivity"
+            android:name="org.adrianvictor.geleia.activities.MainActivity"
             android:launchMode="singleTop" />
-        <activity android:name=".activities.details.AlbumDetailActivity" />
-        <activity android:name=".activities.details.ArtistDetailActivity" />
-        <activity android:name=".activities.details.GenreDetailActivity" />
-        <activity android:name=".activities.details.PlaylistDetailActivity" />
-        <activity android:name=".activities.SearchActivity" />
-        <activity android:name=".activities.SplashActivity" android:exported="true">
+        <activity android:name="org.adrianvictor.geleia.activities.details.AlbumDetailActivity" />
+        <activity android:name="org.adrianvictor.geleia.activities.details.ArtistDetailActivity" />
+        <activity android:name="org.adrianvictor.geleia.activities.details.GenreDetailActivity" />
+        <activity android:name="org.adrianvictor.geleia.activities.details.PlaylistDetailActivity" />
+        <activity android:name="org.adrianvictor.geleia.activities.SearchActivity" />
+        <activity android:name="org.adrianvictor.geleia.activities.SplashActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.MUSIC_PLAYER" />
@@ -48,29 +48,29 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.SettingsActivity"
+            android:name="org.adrianvictor.geleia.activities.SettingsActivity"
             android:label="@string/action_settings" />
         <activity
-            android:name=".activities.AboutActivity"
+            android:name="org.adrianvictor.geleia.activities.AboutActivity"
             android:label="@string/action_about" />
         <activity
-            android:name=".activities.LoginActivity"
+            android:name="org.adrianvictor.geleia.activities.LoginActivity"
             android:label="@string/action_login"
             android:theme="@style/LoginScreen" />
         <activity
-            android:name=".activities.SelectActivity"
+            android:name="org.adrianvictor.geleia.activities.SelectActivity"
             android:label="@string/select"
             android:theme="@style/LoginScreen" />
         <activity
-            android:name=".views.shortcuts.AppShortcutLauncherActivity"
+            android:name="org.adrianvictor.geleia.views.shortcuts.AppShortcutLauncherActivity"
             android:launchMode="singleInstance"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-        <service android:name=".service.DownloadService" />
-        <service android:name=".service.LoginService" />
-        <service android:name=".service.MusicService" />
+        <service android:name="org.adrianvictor.geleia.service.DownloadService" />
+        <service android:name="org.adrianvictor.geleia.service.LoginService" />
+        <service android:name="org.adrianvictor.geleia.service.MusicService" />
 
-        <receiver android:name=".service.receivers.MediaButtonIntentReceiver" android:exported="false">
+        <receiver android:name="org.adrianvictor.geleia.service.receivers.MediaButtonIntentReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.MEDIA_BUTTON" />
             </intent-filter>
@@ -83,7 +83,7 @@
             android:name="com.lge.support.SPLIT_WINDOW"
             android:value="true" />
 
-        <receiver android:name=".views.widgets.BootReceiver" android:exported="false">
+        <receiver android:name="org.adrianvictor.geleia.views.widgets.BootReceiver" android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -91,7 +91,7 @@
         </receiver>
 
         <receiver
-            android:name=".views.widgets.AppWidgetAlbum"
+            android:name="org.adrianvictor.geleia.views.widgets.AppWidgetAlbum"
             android:exported="false"
             android:label="@string/widget_big">
             <intent-filter>
@@ -103,7 +103,7 @@
                 android:resource="@xml/widget_album" />
         </receiver>
         <receiver
-            android:name=".views.widgets.AppWidgetClassic"
+            android:name="org.adrianvictor.geleia.views.widgets.AppWidgetClassic"
             android:exported="false"
             android:label="@string/widget_classic">
             <intent-filter>
@@ -115,7 +115,7 @@
                 android:resource="@xml/widget_classic" />
         </receiver>
         <receiver
-            android:name=".views.widgets.AppWidgetCard"
+            android:name="org.adrianvictor.geleia.views.widgets.AppWidgetCard"
             android:exported="false"
             android:label="@string/widget_card">
             <intent-filter>

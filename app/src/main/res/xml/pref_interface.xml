@@ -1,7 +1,7 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <com.dkanada.gramophone.views.settings.JellyPreferenceCategory android:title="@string/pref_header_colors">
+    <org.adrianvictor.geleia.views.settings.JellyPreferenceCategory android:title="@string/pref_header_colors">
 
         <ListPreference
             app:iconSpaceReserved="false"
@@ -14,14 +14,14 @@
             android:positiveButtonText="@null"
             android:title="@string/pref_title_theme" />
 
-        <com.dkanada.gramophone.views.settings.ColorPreference
+        <org.adrianvictor.geleia.views.settings.ColorPreference
             app:iconSpaceReserved="false"
             android:defaultValue="@color/color_primary"
             android:key="primary_color"
             android:summary="@string/pref_summary_primary_color"
             android:title="@string/pref_title_primary_color" />
 
-        <com.dkanada.gramophone.views.settings.ColorPreference
+        <org.adrianvictor.geleia.views.settings.ColorPreference
             app:iconSpaceReserved="false"
             android:defaultValue="@color/color_accent"
             android:key="accent_color"
@@ -35,6 +35,6 @@
             android:summary="@string/pref_summary_colored_shortcuts"
             android:title="@string/pref_title_colored_shortcuts" />
 
-    </com.dkanada.gramophone.views.settings.JellyPreferenceCategory>
+    </org.adrianvictor.geleia.views.settings.JellyPreferenceCategory>
 
 </androidx.preference.PreferenceScreen>

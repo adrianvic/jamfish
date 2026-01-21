@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.SelectActivity">
+    tools:context="org.adrianvictor.geleia.activities.SelectActivity">
 
     <include layout="@layout/status_bar"
         android:id="@+id/status_bar"

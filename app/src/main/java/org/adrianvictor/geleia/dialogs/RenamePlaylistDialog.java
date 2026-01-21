@@ -1,0 +1,49 @@
+package org.adrianvictor.geleia.dialogs;
+
+import android.app.Dialog;
+import android.os.Bundle;
+import android.text.InputType;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+
+import com.afollestad.materialdialogs.MaterialDialog;
+import org.adrianvictor.geleia.R;
+import org.adrianvictor.geleia.model.Playlist;
+import org.adrianvictor.geleia.util.PlaylistUtil;
+
+public class RenamePlaylistDialog extends DialogFragment {
+    public static final String TAG = RenamePlaylistDialog.class.getSimpleName();
+
+    private static final String PLAYLIST = "playlist";
+
+    @NonNull
+    public static RenamePlaylistDialog create(Playlist playlist) {
+        RenamePlaylistDialog dialog = new RenamePlaylistDialog();
+
+        Bundle args = new Bundle();
+        args.putString(PLAYLIST, playlist.id);
+
+        dialog.setArguments(args);
+        return dialog;
+    }
+
+    @NonNull
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        return new MaterialDialog.Builder(requireActivity())
+            .title(R.string.rename_playlist_title)
+            .positiveText(R.string.rename_action)
+            .negativeText(android.R.string.cancel)
+            .inputType(InputType.TYPE_CLASS_TEXT)
+            .input(getString(R.string.name), "", false, (materialDialog, charSequence) -> {
+                final String name = charSequence.toString().trim();
+
+                if (!name.isEmpty()) {
+                    String id = getArguments().getString(PLAYLIST);
+                    PlaylistUtil.renamePlaylist(id, name);
+                }
+            })
+            .build();
+    }
+}

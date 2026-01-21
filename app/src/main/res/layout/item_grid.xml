@@ -14,7 +14,7 @@
         android:orientation="vertical"
         tools:ignore="UselessParent">
 
-        <com.dkanada.gramophone.views.WidthFitSquareLayout
+        <org.adrianvictor.geleia.views.WidthFitSquareLayout
             android:id="@+id/image_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -27,7 +27,7 @@
                 app:srcCompat="@drawable/default_album_art"
                 tools:ignore="ContentDescription" />
 
-        </com.dkanada.gramophone.views.WidthFitSquareLayout>
+        </org.adrianvictor.geleia.views.WidthFitSquareLayout>
 
         <LinearLayout
             android:id="@+id/palette_color_container"

@@ -7,7 +7,7 @@
     android:foreground="?attr/rectSelector"
     tools:ignore="UnusedAttribute">
 
-    <com.dkanada.gramophone.views.IconImageView
+    <org.adrianvictor.geleia.views.IconImageView
         android:id="@+id/drag_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
@@ -53,7 +53,7 @@
 
         </LinearLayout>
 
-        <com.dkanada.gramophone.views.IconImageView
+        <org.adrianvictor.geleia.views.IconImageView
             android:id="@+id/menu"
             style="@style/OverFlowButton"
             android:layout_gravity="center_vertical"
