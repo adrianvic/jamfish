@@ -2,6 +2,7 @@ package com.dkanada.gramophone.util;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -78,7 +79,12 @@ public class MusicUtil {
     }
 
     public static String getFileUri(Song song) {
-        File root = new File(PreferenceUtil.getInstance(App.getInstance()).getLocationDownload(), "music");
+        String location = PreferenceUtil.getInstance(App.getInstance()).getLocationDownload();
+        File root = new File(location, "music");
+        if (!location.equals(App.getInstance().getCacheDir().toString())) {
+            Uri uri = Uri.parse(location);
+            return new File(uri.getPath()).getAbsolutePath();
+        }
 
         String path = "/" + ascii(song.artistName) + "/" + ascii(song.albumName);
         String name = "/" + song.discNumber + "." + song.trackNumber + " - " + ascii(song.title) + "." + song.container;

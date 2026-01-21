@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <SwitchPreference
+        app:key="save_lyrics"
+        app:title="@string/save_lyrics"
+        app:defaultValue="false" />
+    <Preference
+        app:key="cached_songs_location"
+        app:title="@string/cached_songs_location"
+        app:summary="@string/cached_songs_location_summary" />
+</androidx.preference.PreferenceScreen>

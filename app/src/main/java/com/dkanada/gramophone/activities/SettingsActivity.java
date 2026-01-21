@@ -1,12 +1,19 @@
 package com.dkanada.gramophone.activities;
 
+import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
@@ -19,6 +26,8 @@ import com.dkanada.gramophone.dialogs.preferences.CategoryPreferenceDialog;
 import com.dkanada.gramophone.dialogs.preferences.NowPlayingPreferenceDialog;
 import com.dkanada.gramophone.activities.base.AbsBaseActivity;
 import com.dkanada.gramophone.util.PreferenceUtil;
+
+import java.io.File;
 
 public class SettingsActivity extends AbsBaseActivity {
     private ActivitySettingsBinding binding;
@@ -43,6 +52,30 @@ public class SettingsActivity extends AbsBaseActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
+
+        private ActivityResultLauncher<Intent> dirPickerLauncher;
+
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+
+            dirPickerLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK) {
+                            Intent data = result.getData();
+                            if (data != null) {
+                                Uri uri = data.getData();
+                                requireContext().getContentResolver().takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(requireContext()).edit();
+                                editor.putString(PreferenceUtil.LOCATION_DOWNLOAD, uri.toString());
+                                editor.apply();
+                                invalidateSettings();
+                            }
+                        }
+                    });
+        }
+
         @Override
         public void onCreatePreferences(Bundle bundle, String s) {
             addPreferencesFromResource(R.xml.pref_library);
@@ -93,14 +126,6 @@ public class SettingsActivity extends AbsBaseActivity {
                 blurAlbumCoverPreference.setEnabled(false);
             }
 
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.Q) {
-                downloadLocationPreference.setEnabled(false);
-
-                // stock Android 11 removed the album cover on lock screens
-                // supported on LineageOS so we might want to add a check at some point
-                showAlbumCoverPreference.setEnabled(false);
-            }
-
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.R) {
                 // custom notification layouts were removed entirely in Android 12
                 classicNotification.setEnabled(false);
@@ -117,11 +142,30 @@ public class SettingsActivity extends AbsBaseActivity {
                 return false;
             });
 
-            // use this to set default state for playback screen and notification style
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+            downloadLocationPreference.setOnPreferenceClickListener(preference -> {
+                openDirectoryPicker();
+                return true;
+            });
 
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+            String downloadLocation = preferences.getString(PreferenceUtil.LOCATION_DOWNLOAD, null);
+            if (downloadLocation != null) {
+                Uri uri = Uri.parse(downloadLocation);
+                File file = new File(uri.getPath());
+                downloadLocationPreference.setSummary(file.getPath());
+            } else {
+                downloadLocationPreference.setSummary(R.string.pref_title_download_location);
+            }
+
+
+            // use this to set default state for playback screen and notification style
             onSharedPreferenceChanged(preferences, PreferenceUtil.NOW_PLAYING_SCREEN);
             onSharedPreferenceChanged(preferences, PreferenceUtil.CLASSIC_NOTIFICATION);
+        }
+
+        private void openDirectoryPicker() {
+            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+            dirPickerLauncher.launch(intent);
         }
 
         @Override

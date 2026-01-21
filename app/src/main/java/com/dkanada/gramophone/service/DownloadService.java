@@ -2,7 +2,9 @@ package com.dkanada.gramophone.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.IBinder;
+import androidx.documentfile.provider.DocumentFile;
 
 import com.dkanada.gramophone.App;
 import com.dkanada.gramophone.BuildConfig;
@@ -13,8 +15,6 @@ import com.dkanada.gramophone.util.MusicUtil;
 import com.dkanada.gramophone.util.PreferenceUtil;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -76,17 +76,28 @@ public class DownloadService extends Service {
                 URL url = new URL(MusicUtil.getDownloadUri(song));
                 URLConnection connection = url.openConnection();
 
-                String cache = PreferenceUtil.getInstance(App.getInstance()).getLocationCache();
-                File download = new File(cache, "download/" + song.id);
-                File audio = new File(MusicUtil.getFileUri(song));
+                String location = PreferenceUtil.getInstance(App.getInstance()).getLocationDownload();
+                DocumentFile root;
+                if (location.equals(getApplicationContext().getCacheDir().toString())) {
+                    root = DocumentFile.fromFile(new File(location));
+                } else {
+                    root = DocumentFile.fromTreeUri(this, Uri.parse(location));
+                }
 
-                download.getParentFile().mkdirs();
-                download.createNewFile();
-                audio.getParentFile().mkdirs();
-                audio.createNewFile();
+                DocumentFile artist = root.findFile(MusicUtil.ascii(song.artistName));
+                if (artist == null) {
+                    artist = root.createDirectory(MusicUtil.ascii(song.artistName));
+                }
+                DocumentFile album = artist.findFile(MusicUtil.ascii(song.albumName));
+                if (album == null) {
+                    album = artist.createDirectory(MusicUtil.ascii(song.albumName));
+                }
+
+                String fileName = song.discNumber + "." + song.trackNumber + " - " + MusicUtil.ascii(song.title) + "." + song.container;
+                DocumentFile audio = album.createFile("audio/" + song.container, fileName);
 
                 InputStream input = connection.getInputStream();
-                OutputStream output = new FileOutputStream(download);
+                OutputStream output = getContentResolver().openOutputStream(audio.getUri());
 
                 connection.connect();
 
@@ -102,17 +113,6 @@ public class DownloadService extends Service {
                 input.close();
                 output.close();
 
-                input = new FileInputStream(download);
-                output = new FileOutputStream(audio);
-
-                while ((count = input.read(data)) != -1) {
-                    output.write(data, 0, count);
-                }
-
-                input.close();
-                output.close();
-
-                download.delete();
                 App.getDatabase().cacheDao().insertCache(new Cache(song));
                 notification.stop(song);
             } catch (Exception e) {

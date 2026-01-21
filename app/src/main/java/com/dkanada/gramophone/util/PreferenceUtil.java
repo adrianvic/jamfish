@@ -84,7 +84,6 @@ public final class PreferenceUtil {
     public static final String GAIN_OFFSET = "gain_offset";
 
     public static final String LOCATION_DOWNLOAD = "location_download";
-    public static final String LOCATION_CACHE = "location_cache";
     public static final String IMAGE_CACHE_SIZE = "image_cache_size";
     public static final String MEDIA_CACHE_SIZE = "media_cache_size";
 
@@ -97,7 +96,7 @@ public final class PreferenceUtil {
 
             preferences.edit().putString(GENERAL_THEME, Theme.valueOf(theme.toUpperCase()).toString()).commit();
             preferences.edit().putString(IMAGE_CACHE_SIZE, imageSize.substring(0, imageSize.length() - 6)).commit();
-            preferences.edit().putString(MEDIA_CACHE_SIZE, mediaSize.substring(0, imageSize.length() - 6)).commit();
+            preferences.edit().putString(MEDIA_CACHE_SIZE, mediaSize.substring(0, mediaSize.length() - 6)).commit();
         }
     };
 
@@ -424,7 +423,7 @@ public final class PreferenceUtil {
     }
 
     public final String getLocationCache() {
-        return mPreferences.getString(LOCATION_CACHE, mContext.getCacheDir().toString());
+        return mContext.getCacheDir().toString();
     }
 
     public final long getImageCacheSize() {
