@@ -1,3 +1,0 @@
-- update dependencies
-- add version check for future breaking changes
-- implement options for image caching

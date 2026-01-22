@@ -1,3 +1,0 @@
-- add loading indicator to all progress views
-- implement server selection for saved credentials
-- small layout changes for modern feature support

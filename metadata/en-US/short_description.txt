@@ -1,1 +1,1 @@
-Native music player for Jellyfin
+Delicious native music player for Jellyfin, based on Gelli.
