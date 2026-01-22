@@ -11,6 +11,7 @@ import org.adrianvictor.geleia.BuildConfig;
 import org.adrianvictor.geleia.database.Cache;
 import org.adrianvictor.geleia.model.Song;
 import org.adrianvictor.geleia.service.notifications.DownloadNotification;
+import org.adrianvictor.geleia.service.notifications.ErrorNotification;
 import org.adrianvictor.geleia.util.MusicUtil;
 import org.adrianvictor.geleia.util.PreferenceUtil;
 
@@ -23,7 +24,6 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@SuppressWarnings("ResultOfMethodCallIgnored")
 public class DownloadService extends Service {
     public static final String PACKAGE_NAME = BuildConfig.APPLICATION_ID;
     public static final String ACTION_START = PACKAGE_NAME + ".action.start";
@@ -55,6 +55,7 @@ public class DownloadService extends Service {
                 break;
             case DownloadService.ACTION_START:
                 List<Song> songs = intent.getParcelableArrayListExtra(EXTRA_SONGS);
+                assert songs != null;
                 for (Song song : songs) {
                     download(song);
                     notification.start(song);
@@ -116,7 +117,7 @@ public class DownloadService extends Service {
                 App.getDatabase().cacheDao().insertCache(new Cache(song));
                 notification.stop(song);
             } catch (Exception e) {
-                e.printStackTrace();
+                ErrorNotification.show(this, e.getMessage());
             }
         });
     }

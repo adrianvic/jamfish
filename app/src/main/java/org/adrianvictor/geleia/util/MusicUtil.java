@@ -18,6 +18,7 @@ import org.adrianvictor.geleia.model.Codec;
 import org.adrianvictor.geleia.model.Genre;
 import org.adrianvictor.geleia.model.Song;
 
+import org.adrianvictor.geleia.service.notifications.ErrorNotification;
 import org.jellyfin.apiclient.interaction.ApiClient;
 import org.jellyfin.apiclient.interaction.Response;
 import org.jellyfin.apiclient.model.dto.UserItemDataDto;
@@ -102,7 +103,7 @@ public class MusicUtil {
         try {
             return new Intent();
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            ErrorNotification.show(context, e.getMessage());
             Toast.makeText(context, R.string.error_share_file, Toast.LENGTH_SHORT).show();
             return new Intent();
         }

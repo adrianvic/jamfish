@@ -235,5 +235,6 @@
     <string name="error_empty_username">Please fill in your username.</string>
     <string name="dkanada_summary">Forking Phonograph and making Gelli</string>
     <string name="adrianvictor">Adrian Victor</string>
+    <string name="error_notification_title">An error occurred in Jamfish.</string>
 
 </resources>

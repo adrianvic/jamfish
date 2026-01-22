@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
+import org.adrianvictor.geleia.service.notifications.ErrorNotification;
 import org.adrianvictor.geleia.util.NavigationUtil;
 import org.adrianvictor.geleia.util.PreferenceUtil;
 import org.adrianvictor.geleia.databinding.ActivityAboutBinding;
@@ -102,7 +103,7 @@ public class AboutActivity extends AbsBaseActivity implements View.OnClickListen
         try {
             return context.getPackageManager().getPackageInfo(context.getPackageName(), 0).versionName;
         } catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+            ErrorNotification.show(context, e.getMessage());
         }
 
         return "Unknown";
