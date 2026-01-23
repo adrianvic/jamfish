@@ -27,7 +27,8 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="?attr/dividerColor" />
+            android:layout_marginBottom="10dp"
+            android:background="?attr/dividerColor"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -75,6 +76,12 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
+            android:background="?attr/dividerColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -134,6 +141,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
             android:background="?attr/dividerColor" />
 
         <LinearLayout
@@ -186,6 +194,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
             android:background="?attr/dividerColor" />
 
         <LinearLayout
@@ -238,6 +247,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
             android:background="?attr/dividerColor" />
 
         <LinearLayout
@@ -298,6 +308,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginBottom="10dp"
             android:background="?attr/dividerColor" />
 
         <LinearLayout

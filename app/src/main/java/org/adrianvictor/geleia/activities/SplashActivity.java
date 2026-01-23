@@ -45,20 +45,6 @@ public class SplashActivity extends AbsBaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_splash);
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        unregisterReceiver(receiver);
-        overridePendingTransition(0, R.anim.fade_delay);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
         final IntentFilter filter = new IntentFilter();
         filter.addAction(LoginService.STATE_ONLINE);
         filter.addAction(LoginService.STATE_OFFLINE);
@@ -68,6 +54,19 @@ public class SplashActivity extends AbsBaseActivity {
         } else {
             registerReceiver(receiver, filter);
         }
+
+        setContentView(R.layout.activity_splash);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        overridePendingTransition(0, R.anim.fade_delay);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         User user = App.getDatabase().userDao().getUser(PreferenceUtil.getInstance(this).getUser());
         List<User> available = App.getDatabase().userDao().getUsers();
@@ -81,5 +80,11 @@ public class SplashActivity extends AbsBaseActivity {
         } else {
             startService(new Intent(this, LoginService.class));
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        unregisterReceiver(receiver);
+        super.onDestroy();
     }
 }

@@ -29,7 +29,7 @@ public abstract class AbsMusicContentActivity extends AbsMusicPanelActivity impl
                     onStateOnline();
                     break;
                 case LoginService.STATE_OFFLINE:
-                    NavigationUtil.startSelect(context);
+                    onStateOffline();
                     break;
             }
         }

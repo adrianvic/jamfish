@@ -241,5 +241,8 @@
     <string name="oops">Oops! I did it again...</string>
     <string name="sad_face">;(</string>
     <string name="server_is_unreachable">Sorry, but we couldn\'t reach this server right now.</string>
+    <string name="license">License</string>
+    <string name="app_license">GNU General Public License v3.0</string>
+    <string name="application_license">GNU General Public License v3.0</string>
 
 </resources>

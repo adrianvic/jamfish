@@ -59,11 +59,6 @@ public class LoginService extends Service {
             }
         }
 
-        if (App.getApiClient() == null) {
-            sendBroadcast(new Intent(STATE_OFFLINE));
-            return;
-        }
-
         App.getApiClient().ChangeServerLocation(user.server);
         App.getApiClient().SetAuthenticationInfo(user.token, user.id);
         App.getApiClient().GetSystemInfoAsync(new Response<SystemInfo>() {

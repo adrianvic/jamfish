@@ -1,12 +1,9 @@
 package org.adrianvictor.geleia.activities;
 
-import static org.adrianvictor.geleia.adapter.CustomFragmentStatePagerAdapter.TAG;
-
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -23,6 +20,7 @@ import com.afollestad.materialcab.attached.AttachedCabKt;
 import org.adrianvictor.geleia.activities.base.AbsMusicContentActivity;
 import org.adrianvictor.geleia.fragments.OfflineFragment;
 import org.adrianvictor.geleia.interfaces.CabHolder;
+import org.adrianvictor.geleia.util.NavigationUtil;
 import org.adrianvictor.geleia.util.PreferenceUtil;
 import org.adrianvictor.geleia.util.ThemeUtil;
 import org.adrianvictor.geleia.databinding.ActivityMainContentBinding;
@@ -105,7 +103,6 @@ public class MainActivity extends AbsMusicContentActivity implements CabHolder {
 
     @Override
     public void onStateOffline() {
-        Log.d(TAG, "onStateOffline() foi chamado.");
         Menu menu = binding.navigationView.getMenu();
         menu.clear();
 
@@ -118,7 +115,11 @@ public class MainActivity extends AbsMusicContentActivity implements CabHolder {
 
         setUpDrawerLayout();
 
-        pendingShowOffline = true;
+        if (getLifecycle().getCurrentState().isAtLeast(Lifecycle.State.RESUMED)) {
+            NavigationUtil.startUnreachable(this);
+        } else {
+            pendingShowOffline = true;
+        }
     }
 
     @Override
