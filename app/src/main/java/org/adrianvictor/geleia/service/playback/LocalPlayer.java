@@ -2,6 +2,7 @@ package org.adrianvictor.geleia.service.playback;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -141,11 +142,17 @@ public class LocalPlayer implements Playback {
 
     private List<MediaItem> createMediaItems(List<Song> queue) {
         return queue.stream().map(song -> {
-            File audio = new File(MusicUtil.getFileUri(song));
-            Uri uri = Uri.fromFile(audio);
+            String fileUri = MusicUtil.getFileUri(song);
+            Uri uri;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && fileUri.startsWith("content://")) {
+                uri = Uri.parse(fileUri);
+            } else {
+                File audio = new File(fileUri);
+                uri = Uri.fromFile(audio);
 
-            if (!audio.exists()) {
-                uri = Uri.parse(MusicUtil.getTranscodeUri(song));
+                if (!audio.exists()) {
+                    uri = Uri.parse(MusicUtil.getTranscodeUri(song));
+                }
             }
 
             List<String> containers = PreferenceUtil.getInstance(context).getDirectPlayCodecs().stream()

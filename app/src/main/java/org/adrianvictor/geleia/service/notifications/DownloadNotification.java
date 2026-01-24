@@ -1,114 +1,134 @@
 package org.adrianvictor.geleia.service.notifications;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
+import android.widget.RemoteViews;
 
-import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
 import org.adrianvictor.geleia.R;
-import org.adrianvictor.geleia.activities.MainActivity;
 import org.adrianvictor.geleia.model.Song;
 import org.adrianvictor.geleia.service.DownloadService;
 
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class DownloadNotification {
-    private static final String CHANNEL_ID = DownloadNotification.class.getSimpleName();
-    private static final int NOTIFICATION_ID = 2;
-
+    private static final String CHANNEL_ID = "download_channel";
+    private final int ID = 2;
     private final Context context;
     private final NotificationManager notificationManager;
+    private final List<Song> queue = Collections.synchronizedList(new LinkedList<>());
 
-    private final List<Song> songs;
-
-    private int current;
-    private int maximum;
+    private long totalSize;
+    private long downloadedSize;
+    private int lastPercentage = -1;
 
     public DownloadNotification(Context context) {
-        this.notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         this.context = context;
-
-        this.songs = new ArrayList<>();
+        this.notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        createNotificationChannel();
     }
 
-    public synchronized void start(Song song) {
-        this.songs.add(song);
-
+    private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            createNotificationChannel();
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    context.getString(R.string.download_channel_name),
+                    NotificationManager.IMPORTANCE_LOW
+            );
+            notificationManager.createNotificationChannel(channel);
         }
     }
 
-    public synchronized void update(int current, int maximum) {
-        this.current += current;
-        this.maximum += maximum;
-
-        Intent action = new Intent(context, MainActivity.class).setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent clickIntent = PendingIntent.getActivity(context, 0, action, PendingIntent.FLAG_IMMUTABLE);
-
-        Intent cancel = new Intent(context, DownloadService.class).setAction(DownloadService.ACTION_CANCEL);
-        PendingIntent pendingCancel = PendingIntent.getService(context, 0, cancel, PendingIntent.FLAG_IMMUTABLE);
-
-        NotificationCompat.InboxStyle style = new NotificationCompat.InboxStyle();
-        for (Song item : songs.stream().limit(5).collect(Collectors.toList())) {
-            style.addLine(item.title);
+    public void start(Song song) {
+        queue.add(song);
+        if (queue.size() == 1) { // This is the first song of a new batch
+            totalSize = 0;
+            downloadedSize = 0;
+            lastPercentage = -1;
+            notificationManager.notify(ID, getNotification());
+        } else if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            // For KitKat, update for every new song to show correct count.
+            notificationManager.notify(ID, getNotification());
         }
+    }
+
+    public void update(long downloaded, long total) {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.KITKAT) {
+            return; // No progress updates for KitKat
+        }
+
+        synchronized (this) {
+            totalSize += total;
+            downloadedSize += downloaded;
+
+            int percentage = 0;
+            if (totalSize > 0) {
+                percentage = (int) ((downloadedSize * 100) / totalSize);
+            }
+
+            if (percentage > lastPercentage) {
+                lastPercentage = percentage;
+                notificationManager.notify(ID, getNotification());
+            }
+        }
+    }
+
+    public void stop(Song song) {
+        queue.remove(song);
+        if (queue.isEmpty()) {
+            notificationManager.cancel(ID);
+        } else {
+            // Update notification to show new queue size.
+            // On KitKat, this is the only update after a download finishes.
+            notificationManager.notify(ID, getNotification());
+        }
+    }
+
+    public void cancelAll() {
+        queue.clear();
+        notificationManager.cancel(ID);
+    }
+
+    private Notification getNotification() {
+        Intent intent = new Intent(context, DownloadService.class);
+        intent.setAction(DownloadService.ACTION_CANCEL);
+
+        int flags = 0;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            flags |= PendingIntent.FLAG_IMMUTABLE;
+        }
+        PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, flags);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_notification)
-            .setContentIntent(clickIntent)
-            .setContentTitle(String.format(context.getString(R.string.downloading_x_songs), songs.size()))
-            .setProgress(this.maximum, this.current, false)
-            .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            .addAction(R.drawable.ic_close_white_24dp, context.getString(R.string.action_cancel), pendingCancel)
-            .setStyle(style)
-            .setShowWhen(false);
+                .setSmallIcon(R.drawable.ic_notification)
+                .setContentTitle(context.getString(R.string.downloading_songs))
+                .setOngoing(true)
+                .addAction(android.R.drawable.ic_menu_close_clear_cancel, context.getString(android.R.string.cancel), pendingIntent);
 
-        notificationManager.notify(NOTIFICATION_ID, builder.build());
-    }
+        String contentText = context.getResources().getQuantityString(R.plurals.downloading_s_songs, queue.size(), queue.size());
 
-    public synchronized void stop(Song song) {
-        if (song != null) {
-            songs.remove(song);
-        } else {
-            songs.clear();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.notification_download);
+            remoteViews.setTextViewText(R.id.notification_download_title, contentText);
+            int progress = lastPercentage > 0 ? lastPercentage : 0;
+            remoteViews.setProgressBar(R.id.notification_download_progress, 100, progress, totalSize == 0 && downloadedSize == 0);
+            builder.setCustomContentView(remoteViews);
+        } else if (Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT) {
+            int progress = lastPercentage > 0 ? lastPercentage : 0;
+            builder.setProgress(100, progress, totalSize == 0 && downloadedSize == 0);
+            builder.setContentText(contentText);
+        } else { // KitKat
+            builder.setContentText(contentText);
         }
 
-        if (!songs.isEmpty()) {
-            return;
-        }
-
-        current = 0;
-        maximum = 0;
-
-        notificationManager.cancel(NOTIFICATION_ID);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.deleteNotificationChannel(CHANNEL_ID);
-        }
-    }
-
-    @RequiresApi(Build.VERSION_CODES.O)
-    private void createNotificationChannel() {
-        NotificationChannel notificationChannel = notificationManager.getNotificationChannel(CHANNEL_ID);
-
-        if (notificationChannel == null) {
-            notificationChannel = new NotificationChannel(CHANNEL_ID, context.getString(R.string.action_download), NotificationManager.IMPORTANCE_LOW);
-
-            notificationChannel.setDescription(context.getString(R.string.playing_notification_description));
-            notificationChannel.enableLights(false);
-            notificationChannel.enableVibration(false);
-
-            notificationManager.createNotificationChannel(notificationChannel);
-        }
+        return builder.build();
     }
 }

@@ -6,6 +6,9 @@ import android.content.Context;
 import android.os.Build;
 import android.provider.Settings;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.multidex.MultiDexApplication;
 import androidx.room.Room;
 
 import org.adrianvictor.geleia.database.JellyDatabase;
@@ -14,6 +17,7 @@ import org.adrianvictor.geleia.util.PreferenceUtil;
 import org.adrianvictor.geleia.views.shortcuts.DynamicShortcutManager;
 import com.melegy.redscreenofdeath.RedScreenOfDeath;
 
+import org.conscrypt.Conscrypt;
 import org.jellyfin.apiclient.interaction.AndroidDevice;
 import org.jellyfin.apiclient.interaction.ApiClient;
 import org.jellyfin.apiclient.interaction.VolleyHttpClient;
@@ -22,7 +26,16 @@ import org.jellyfin.apiclient.interaction.http.IAsyncHttpClient;
 import org.jellyfin.apiclient.logging.AndroidLogger;
 import org.jellyfin.apiclient.logging.ILogger;
 
-public class App extends Application {
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.Registry;
+import com.bumptech.glide.integration.okhttp3.OkHttpUrlLoader;
+import com.bumptech.glide.load.model.GlideUrl;
+import java.io.InputStream;
+import okhttp3.OkHttpClient;
+
+import java.security.Security;
+
+public class App extends MultiDexApplication {
     private static App app;
 
     private static JellyDatabase database;
@@ -30,7 +43,13 @@ public class App extends Application {
 
     @Override
     public void onCreate() {
+        // Initializing stuff for older Android APIs compatibility
+        Security.insertProviderAt(Conscrypt.newProvider(), 1); // To have SSL 1.2 on API < 19
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true); // To load vectors on API < 19
+
         super.onCreate();
+
+        initializeGlide(this);
 
         if (BuildConfig.DEBUG) {
             RedScreenOfDeath.init(this);
@@ -90,5 +109,16 @@ public class App extends Application {
 
     public static App getInstance() {
         return app;
+    }
+
+    private void initializeGlide(@NonNull Context context) {
+        // This OkHttpClient is now created with Conscrypt as the SSL provider.
+        OkHttpClient client = new OkHttpClient.Builder().build();
+
+        // Manually create and register Glide's OkHttp component.
+        OkHttpUrlLoader.Factory factory = new OkHttpUrlLoader.Factory(client);
+
+        // Ensure Glide is initialized and then register the component.
+        Glide.get(context).getRegistry().replace(GlideUrl.class, InputStream.class, factory);
     }
 }

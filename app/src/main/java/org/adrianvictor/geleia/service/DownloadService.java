@@ -4,6 +4,8 @@ import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.IBinder;
+import android.util.Log;
+
 import androidx.documentfile.provider.DocumentFile;
 
 import org.adrianvictor.geleia.App;
@@ -25,6 +27,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 public class DownloadService extends Service {
+    public static final String TAG = DownloadService.class.getSimpleName();
     public static final String PACKAGE_NAME = BuildConfig.APPLICATION_ID;
     public static final String ACTION_START = PACKAGE_NAME + ".action.start";
     public static final String ACTION_CANCEL = PACKAGE_NAME + ".action.cancel";
@@ -79,10 +82,10 @@ public class DownloadService extends Service {
 
                 String location = PreferenceUtil.getInstance(App.getInstance()).getLocationDownload();
                 DocumentFile root;
-                if (location.equals(getApplicationContext().getCacheDir().toString())) {
-                    root = DocumentFile.fromFile(new File(location));
-                } else {
+                if (location.startsWith("content://")) {
                     root = DocumentFile.fromTreeUri(this, Uri.parse(location));
+                } else {
+                    root = DocumentFile.fromFile(new File(location));
                 }
 
                 DocumentFile artist = root.findFile(MusicUtil.ascii(song.artistName));
@@ -117,6 +120,7 @@ public class DownloadService extends Service {
                 App.getDatabase().cacheDao().insertCache(new Cache(song));
                 notification.stop(song);
             } catch (Exception e) {
+                Log.e(TAG, "Failed to download song: " + song.title, e);
                 ErrorNotification.show(this, e.getMessage());
             }
         });

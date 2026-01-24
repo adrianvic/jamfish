@@ -3,6 +3,7 @@ package org.adrianvictor.geleia.util;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
@@ -82,7 +83,8 @@ public class MusicUtil {
     public static String getFileUri(Song song) {
         String location = PreferenceUtil.getInstance(App.getInstance()).getLocationDownload();
         File root = new File(location, "music");
-        if (!location.equals(App.getInstance().getCacheDir().toString())) {
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !location.equals(App.getInstance().getCacheDir().toString())) {
             Uri uri = Uri.parse(location);
             return new File(uri.getPath()).getAbsolutePath();
         }

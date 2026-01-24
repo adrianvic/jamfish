@@ -127,8 +127,11 @@ public abstract class AbsBaseActivity extends AbsThemeActivity {
     private boolean checkBatteryOptimization() {
         String packageName = getPackageName();
         PowerManager pm = (PowerManager) getSystemService(POWER_SERVICE);
-
-        return pm.isIgnoringBatteryOptimizations(packageName);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            return pm.isIgnoringBatteryOptimizations(packageName);
+        } else {
+            return true;
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -138,9 +141,11 @@ public abstract class AbsBaseActivity extends AbsThemeActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private boolean checkPermissions() {
-        for (String permission : permissions) {
-            if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                return false;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (String permission : permissions) {
+                if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
             }
         }
 

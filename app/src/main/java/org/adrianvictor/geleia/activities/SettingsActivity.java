@@ -51,6 +51,7 @@ public class SettingsActivity extends AbsBaseActivity {
     public static class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener {
 
         private ActivityResultLauncher<Intent> dirPickerLauncher;
+        private ActivityResultLauncher<Intent> legacyDirPickerLauncher;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -71,6 +72,25 @@ public class SettingsActivity extends AbsBaseActivity {
                             }
                         }
                     });
+
+            legacyDirPickerLauncher = registerForActivityResult(
+                    new ActivityResultContracts.StartActivityForResult(),
+                    result -> {
+                        if (result.getResultCode() == RESULT_OK && result.getData() != null) {
+                            String path = result.getData().getStringExtra(
+                                    DirectoryPickerActivity.EXTRA_RESULT_PATH
+                            );
+
+                            if (path != null) {
+                                SharedPreferences.Editor editor =
+                                        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit();
+                                editor.putString(PreferenceUtil.LOCATION_DOWNLOAD, path);
+                                editor.apply();
+                                invalidateSettings();
+                            }
+                        }
+                    }
+            );
         }
 
         @Override
@@ -161,8 +181,13 @@ public class SettingsActivity extends AbsBaseActivity {
         }
 
         private void openDirectoryPicker() {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-            dirPickerLauncher.launch(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                dirPickerLauncher.launch(intent);
+            } else {
+                Intent intent = new Intent(requireContext(), DirectoryPickerActivity.class);
+                legacyDirPickerLauncher.launch(intent);
+            }
         }
 
         @Override

@@ -51,6 +51,7 @@
         <activity
             android:name="org.adrianvictor.geleia.activities.SettingsActivity"
             android:label="@string/action_settings" />
+        <activity android:name="org.adrianvictor.geleia.activities.DirectoryPickerActivity"/>
         <activity
             android:name="org.adrianvictor.geleia.activities.AboutActivity"
             android:label="@string/action_about" />
@@ -137,6 +138,12 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
         </provider>
+
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="remove" />
 
     </application>
 

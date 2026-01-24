@@ -14,6 +14,7 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.content.res.ResourcesCompat;
 
@@ -91,18 +92,22 @@ public class ImageUtil {
     }
 
     public static Drawable getTintedVectorDrawable(@NonNull Context context, @DrawableRes int resId, @ColorInt int color) {
-        Drawable drawable = getVectorDrawable(context.getResources(), resId, context.getTheme());
+        final Drawable drawable = AppCompatResources.getDrawable(context, resId);
 
-        DrawableCompat.setTintMode(drawable, PorterDuff.Mode.SRC_IN);
-        DrawableCompat.setTint(drawable, color);
+        if (drawable != null) {
+            Drawable wrappedDrawable = DrawableCompat.wrap(drawable).mutate();
 
-        return drawable;
+            DrawableCompat.setTintMode(wrappedDrawable, PorterDuff.Mode.SRC_IN);
+            DrawableCompat.setTint(wrappedDrawable, color);
+            return wrappedDrawable;
+        }
+        return null;
     }
+
 
     public static Drawable getVectorDrawable(@NonNull Context context, @DrawableRes int resId) {
-        return getVectorDrawable(context.getResources(), resId, context.getTheme());
+        return AppCompatResources.getDrawable(context, resId);
     }
-
     public static Drawable resolveDrawable(@NonNull Context context, @AttrRes int drawableAttr) {
         TypedArray a = context.obtainStyledAttributes(new int[]{drawableAttr});
         Drawable drawable = a.getDrawable(0);
