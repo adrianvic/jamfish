@@ -46,7 +46,7 @@ public class DownloadsAdapter extends RecyclerView.Adapter<DownloadsAdapter.View
         holder.title.setText(song.title);
         holder.artist.setText(song.artistName);
 
-        // TODO: Load album cover into holder.cover using a library like Glide or Picasso
+        // TODO: Load album cover into holder.cover using Glide
     }
 
     @Override

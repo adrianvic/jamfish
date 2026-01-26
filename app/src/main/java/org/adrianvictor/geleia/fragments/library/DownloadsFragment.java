@@ -3,9 +3,10 @@ package org.adrianvictor.geleia.fragments.library;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.GridLayoutManager;
 
-
+import org.adrianvictor.geleia.App;
 import org.adrianvictor.geleia.adapter.DownloadsAdapter;
 
+import org.adrianvictor.geleia.database.Cache;
 import org.adrianvictor.geleia.model.Song;
 import org.adrianvictor.geleia.model.SortMethod;
 import org.adrianvictor.geleia.model.SortOrder;
@@ -34,24 +35,24 @@ public class DownloadsFragment extends AbsLibraryPagerRecyclerViewCustomGridSize
 
     @Override
     protected void loadItems(int index) {
-        List<Song> dummySongs = new ArrayList<>();
+        new Thread(() -> {
+            List<Cache> cachedEntries = App.getDatabase().cacheDao().getAll();
 
-        Song song1 = new Song();
-        song1.title = "Dummy Song Title";
-        song1.artistName = "A. Dummy Artist";
+            List<String> songIds = new ArrayList<>();
 
-        dummySongs.add(song1);
+            for (Cache entry : cachedEntries) {
+                songIds.add(entry.id);
+            }
 
-        Song song2 = new Song();
-        song2.title = "Another Test Song";
-        song2.artistName = "The Testers";
-        dummySongs.add(song2);
+            final List<Song> downloadedSongs = App.getDatabase().cacheDao().getSongs(songIds);
 
-        getActivity().runOnUiThread(() -> {
-            getAdapter().swapDataSet(dummySongs);
-        });
+            if (getActivity() != null) {
+                getActivity().runOnUiThread(() -> {
+                    getAdapter().swapDataSet(downloadedSongs);
+                });
+            }
+        }).start();
     }
-
     @Override
     protected int loadGridSize() {
         return 1;
