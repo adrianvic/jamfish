@@ -247,6 +247,7 @@
 
     <string name="download_channel_name">Downloads</string>
     <string name="downloading_songs">Downloading songs</string>
+    <string name="downloads">Downloads</string>
     <plurals name="downloading_s_songs">
         <item quantity="one">Downloading %d song</item>
         <item quantity="other">Downloading %d songs</item>

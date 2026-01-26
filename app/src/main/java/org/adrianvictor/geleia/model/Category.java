@@ -10,7 +10,8 @@ public enum Category {
     ARTISTS(R.string.artists),
     GENRES(R.string.genres),
     PLAYLISTS(R.string.playlists),
-    FAVORITES(R.string.favorites);
+    FAVORITES(R.string.favorites),
+    DOWNLOADS(R.string.downloads);
 
     @StringRes
     public final int title;

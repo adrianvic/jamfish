@@ -110,9 +110,20 @@ public final class PreferenceUtil {
         }
     };
 
+    private static final PreferenceMigration Migration3 = new PreferenceMigration(2, 3) {
+        @Override
+        public void migrate(SharedPreferences preferences) {
+            String currentCategories = preferences.getString(CATEGORIES, "");
+            if (!currentCategories.toUpperCase().contains(Category.DOWNLOADS.toString())) {
+                preferences.edit().putString(CATEGORIES, currentCategories + "." + Category.DOWNLOADS.toString()).commit();
+            }
+        }
+    };
+
     private static final List<PreferenceMigration> migrations = Arrays.asList(
         Migration1,
-        Migration2
+        Migration2,
+        Migration3
     );
 
     private static PreferenceUtil instance;

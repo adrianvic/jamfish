@@ -10,6 +10,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
 
+import org.adrianvictor.geleia.activities.UnreachableActivity;
+import org.adrianvictor.geleia.fragments.OfflineFragment;
+import org.adrianvictor.geleia.fragments.library.DownloadsFragment;
 import org.adrianvictor.geleia.fragments.library.FavoritesFragment;
 import org.adrianvictor.geleia.model.Category;
 import org.adrianvictor.geleia.fragments.library.AlbumsFragment;
@@ -157,7 +160,8 @@ public class MusicLibraryPagerAdapter extends FragmentPagerAdapter {
         ARTISTS(ArtistsFragment.class),
         GENRES(GenresFragment.class),
         PLAYLISTS(PlaylistsFragment.class),
-        FAVORITES(FavoritesFragment.class);
+        FAVORITES(FavoritesFragment.class),
+        DOWNLOADS(DownloadsFragment.class);
 
         private final Class<? extends Fragment> mFragmentClass;
 
