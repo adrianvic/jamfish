@@ -72,7 +72,7 @@ public class SelectAdapter extends RecyclerView.Adapter<SelectAdapter.ViewHolder
             final User user = users.get(getBindingAdapterPosition());
 
             PreferenceUtil.getInstance(activity).setServer(user.server);
-            PreferenceUtil.getInstance(activity).setUser(user.id);
+            PreferenceUtil.getInstance(activity).setUser(user.uuid);
 
             activity.startActivity(new Intent(activity, SplashActivity.class));
         }

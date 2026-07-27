@@ -9,6 +9,7 @@ import androidx.room.Query;
 import org.adrianvictor.geleia.model.User;
 
 import java.util.List;
+import java.util.UUID;
 
 @Dao
 public interface UserDao {
@@ -21,6 +22,6 @@ public interface UserDao {
     @Query("SELECT * FROM users")
     List<User> getUsers();
 
-    @Query("SELECT * FROM users WHERE id = :id")
-    User getUser(String id);
+    @Query("SELECT * FROM users WHERE uuid = :id")
+    User getUser(UUID id);
 }

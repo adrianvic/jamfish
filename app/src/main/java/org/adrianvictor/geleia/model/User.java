@@ -12,6 +12,8 @@ import java.util.UUID;
 public class User {
     @NonNull
     @PrimaryKey
+    public UUID uuid;
+
     public String id;
     public String name;
 
@@ -19,10 +21,13 @@ public class User {
     public String token;
 
     public User() {
-        this.id = UUID.randomUUID().toString();
+        UUID uuid = UUID.randomUUID();
+        this.uuid = uuid;
+        this.id = uuid.toString();
     }
 
     public User(AuthenticationResult result, String server) {
+        this.uuid = UUID.nameUUIDFromBytes((server + result.getUser().getId()).getBytes());
         this.id = result.getUser().getId();
         this.name = result.getUser().getName();
 

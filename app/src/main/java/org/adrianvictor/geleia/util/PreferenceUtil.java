@@ -17,6 +17,7 @@ import org.adrianvictor.geleia.fragments.player.NowPlayingScreen;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @SuppressLint("ApplySharedPref")
@@ -477,11 +478,20 @@ public final class PreferenceUtil {
         mPreferences.edit().putString(SERVER, server).apply();
     }
 
-    public String getUser() {
-        return mPreferences.getString(USER, null);
+    public UUID getUser() {
+        String user = mPreferences.getString(USER, null);
+        if (user == null) {
+            return null;
+        }
+
+        return UUID.fromString(user);
     }
 
-    public void setUser(String user) {
-        mPreferences.edit().putString(USER, user).apply();
+    public void setUser(UUID user) {
+        if (user == null) {
+            mPreferences.edit().putString(USER, null).apply();
+        }
+
+        mPreferences.edit().putString(USER, String.valueOf(user)).apply();
     }
 }

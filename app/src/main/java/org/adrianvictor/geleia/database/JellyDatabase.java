@@ -2,6 +2,7 @@ package org.adrianvictor.geleia.database;
 
 import androidx.annotation.NonNull;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
@@ -15,9 +16,10 @@ import org.adrianvictor.geleia.model.User;
                 QueueSong.class,
                 User.class
         },
-        version = 7,
+        version = 8,
         exportSchema = false
 )
+@TypeConverters(Converters.class)
 public abstract class JellyDatabase extends RoomDatabase {
     public abstract CacheDao cacheDao();
     public abstract SongDao songDao();
@@ -106,6 +108,45 @@ public abstract class JellyDatabase extends RoomDatabase {
                     + "bitDepth INTEGER NOT NULL,"
                     + "channels INTEGER NOT NULL,"
                     + "cache INTEGER NOT NULL DEFAULT 1)");
+        }
+    };
+
+    public static final Migration Migration8 = new Migration(7, 8) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE users ADD COLUMN uuid TEXT");
+
+            android.database.Cursor cursor = database.query("SELECT id, server FROM users");
+            if (cursor != null) {
+                int idIndex = cursor.getColumnIndex("id");
+                int serverIndex = cursor.getColumnIndex("server");
+
+                while (cursor.moveToNext()) {
+                    String id = cursor.getString(0);
+                    String uuid = java.util.UUID.nameUUIDFromBytes(
+                            (cursor.getString(serverIndex) + cursor.getString(idIndex)).getBytes())
+                            .toString();
+                    database.execSQL("UPDATE users SET uuid = ? WHERE id = ?", new Object[]{uuid, id});
+                }
+                cursor.close();
+            }
+
+            database.execSQL("CREATE TABLE users_new ("
+                    + "uuid TEXT NOT NULL PRIMARY KEY, "
+                    + "id TEXT, "
+                    + "name TEXT, "
+                    + "server TEXT, "
+                    + "token TEXT"
+                    + ")"
+            );
+
+            database.execSQL(
+                    "INSERT INTO users_new (uuid, id, name, server, token) "
+                            + "SELECT uuid, id, name, server, token FROM users"
+            );
+
+            database.execSQL("DROP TABLE users");
+            database.execSQL("ALTER TABLE users_new RENAME TO users");
         }
     };
 }
