@@ -483,8 +483,11 @@ public final class PreferenceUtil {
         if (user == null) {
             return null;
         }
-
-        return UUID.fromString(user);
+        try {
+            return UUID.fromString(user);
+        } catch (IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public void setUser(UUID user) {
