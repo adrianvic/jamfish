@@ -1,0 +1,27 @@
+Este é um reprodutor de música nativo para dispositivos Android que se conecta a servidores de mídia Jellyfin. O código é baseado no repositório arquivado do Gelli, que por sua vez é baseado em uma versão antiga do Phonograph. O Jamfish foi feito para uso pessoal, mas contribuições são bem-vindas! Por favor, abra uma "issue" para debater mudanças maiores antes de enviar um "pull request".
+
+Recursos
+
+- Navegação básica pela biblioteca
+
+- Download de músicas para o armazenamento interno, individualmente ou por ações em lote
+
+- Reprodução sem pausas
+
+- Ordenação de álbuns e músicas por diferentes campos
+
+- Busca de mídia por correspondências parciais
+
+- Integração de serviço de mídia com notificações
+
+- Favoritos e playlists
+
+- Relatório de histórico de reprodução
+
+- Filtragem de conteúdo por biblioteca
+
+Requisitos
+
+- Um servidor Jellyfin
+
+- Android 4.4 ou superior

@@ -1,0 +1,1 @@
+Reprodutor de música nativo e incrível para o Jellyfin, baseado no Gelli.
